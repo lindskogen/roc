@@ -460,6 +460,14 @@ pub const RocDec = extern struct {
         return RocDec{ .num = out };
     }
 
+    pub fn sqrt(self: RocDec) RocDec {
+        return fromF64(@sqrt(self.toF64())).?;
+    }
+
+    pub fn pow(self: RocDec, exponent: RocDec) RocDec {
+        return fromF64(math.pow(f64, self.toF64(), exponent.toF64())).?;
+    }
+
     pub fn log(self: RocDec) RocDec {
         return fromF64(@log(self.toF64())).?;
     }
@@ -1195,6 +1203,19 @@ test "log: 1" {
     try expectEqual(RocDec.fromU64(0), RocDec.log(RocDec.fromU64(1)));
 }
 
+test "pow: 5^2" {
+    try expectEqual(RocDec.fromU64(25), RocDec.pow(RocDec.fromU64(5), RocDec.fromU64(2)));
+}
+
+test "sqrt: 16" {
+    try expectEqual(RocDec.fromU64(4), RocDec.sqrt(RocDec.fromU64(16)));
+}
+
+test "sqrt: 5" {
+    var roc_str = RocStr.init("2.236067977499789824", 20);
+    try expectEqual(RocDec.fromStr(roc_str), RocDec.sqrt(RocDec.fromU64(5)));
+}
+
 // exports
 
 pub fn fromStr(arg: RocStr) callconv(.C) num_.NumParseResult(i128) {
@@ -1289,6 +1310,14 @@ pub fn mulC(arg1: RocDec, arg2: RocDec) callconv(.C) WithOverflow(RocDec) {
 
 pub fn divC(arg1: RocDec, arg2: RocDec) callconv(.C) i128 {
     return @call(.always_inline, RocDec.div, .{ arg1, arg2 }).num;
+}
+
+pub fn sqrtC(arg: RocDec) callconv(.C) i128 {
+    return @call(.always_inline, RocDec.sqrt, .{arg}).num;
+}
+
+pub fn powC(arg1: RocDec, arg2: RocDec) callconv(.C) i128 {
+    return @call(.always_inline, RocDec.pow, .{ arg1, arg2 }).num;
 }
 
 pub fn logC(arg: RocDec) callconv(.C) i128 {

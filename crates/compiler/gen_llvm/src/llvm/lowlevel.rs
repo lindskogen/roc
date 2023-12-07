@@ -2313,6 +2313,7 @@ fn build_dec_unary_op<'a, 'ctx>(
         NumCos => dec_unary_op(env, bitcode::DEC_COS, arg),
         NumSin => dec_unary_op(env, bitcode::DEC_SIN, arg),
         NumTan => dec_unary_op(env, bitcode::DEC_TAN, arg),
+        NumSqrtUnchecked => dec_unary_op(env, bitcode::DEC_TAN, arg),
 
         _ => {
             unreachable!("Unrecognized dec unary operation: {:?}", op);
@@ -2381,6 +2382,11 @@ fn build_dec_binop<'a, 'ctx>(
             env,
             &[lhs, rhs],
             &bitcode::NUM_GREATER_THAN_OR_EQUAL[IntWidth::I128],
+        ),
+        NumPow => call_bitcode_fn(
+            env,
+            &[lhs, rhs],
+            &bitcode::NUM_POW[IntWidth::I128],
         ),
         _ => {
             unreachable!("Unrecognized dec binary operation: {:?}", op);

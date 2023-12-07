@@ -2538,12 +2538,13 @@ fn update<'a>(
                 .type_problems
                 .insert(module_id, solved_module.problems);
 
-            let should_include_expects = (!loc_expects.is_empty() || !loc_dbgs.is_empty()) && {
-                let modules = state.arc_modules.lock();
-                modules
-                    .package_eq(module_id, state.root_id)
-                    .expect("root or this module is not yet known - that's a bug!")
-            };
+            let should_include_expects = !loc_expects.is_empty() || !loc_dbgs.is_empty();
+            //     && {
+            //     let modules = state.arc_modules.lock();
+            //     modules
+            //         .package_eq(module_id, state.root_id)
+            //         .expect("root or this module is not yet known - that's a bug!")
+            // };
 
             let opt_expectations = if should_include_expects {
                 let (path, _) = state.module_cache.sources.get(&module_id).unwrap();

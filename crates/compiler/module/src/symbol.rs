@@ -1486,6 +1486,7 @@ define_builtins! {
         26 DICT_JOINMAP: "joinMap"
         27 DICT_KEEP_IF: "keepIf"
         28 DICT_DROP_IF: "dropIf"
+        29 DICT_RESERVE: "reserve"
     }
     9 SET: "Set" => {
         0 SET_SET: "Set" exposed_type=true // the Set.Set type alias
